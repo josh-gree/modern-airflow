@@ -18,7 +18,11 @@ def hello_k8s():
         print(f"upstream={upstream_host} here={here}")
         assert upstream_host != here, "expected tasks to run in separate pods"
 
-    compare(where_am_i())
+    @task
+    def finished() -> None:
+        print("all tasks ran from the Git bundle")
+
+    compare(where_am_i()) >> finished()
 
 
 hello_k8s()
