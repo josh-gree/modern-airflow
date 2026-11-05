@@ -1,0 +1,5 @@
+.terraform/
+*.tfstate
+*.tfstate.*
+.kube/
+__pycache__/
