@@ -1,4 +1,4 @@
-# Operators, plus stand-ins for services production would get elsewhere (S3, GitHub).
+# Operators, plus a stand-in for S3.
 # Operator CRDs must exist before 03-airflow can plan custom resources.
 terraform {
   required_version = ">= 1.14"

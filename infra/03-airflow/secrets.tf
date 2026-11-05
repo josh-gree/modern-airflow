@@ -59,9 +59,7 @@ resource "kubernetes_secret_v1" "connections" {
   data = {
     AIRFLOW_CONN_GIT_DAGS = jsonencode({
       conn_type = "git"
-      host      = local.gitea.repo_url
-      login     = local.gitea.reader_user
-      password  = local.gitea.reader_password
+      host      = var.dags_repo_url
     })
     AIRFLOW_CONN_LOG_STORE = jsonencode({
       conn_type = "aws"

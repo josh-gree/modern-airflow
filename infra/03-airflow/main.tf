@@ -17,6 +17,12 @@ variable "image_repository" {
   default = "local/airflow"
 }
 
+variable "dags_repo_url" {
+  description = "Public Git repository holding a dags/ directory."
+  type        = string
+  default     = "https://github.com/josh-gree/modern-airflow.git"
+}
+
 variable "image_tag" {
   type = string
 }
@@ -39,7 +45,6 @@ data "terraform_remote_state" "platform" {
 }
 
 locals {
-  gitea = data.terraform_remote_state.platform.outputs.gitea
   minio = data.terraform_remote_state.platform.outputs.minio
 
   namespace   = kubernetes_namespace_v1.airflow.metadata[0].name

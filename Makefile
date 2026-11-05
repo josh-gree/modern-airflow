@@ -6,14 +6,20 @@ TAG     := $(shell shasum image/Dockerfile | cut -c1-12)
 MINIO   := minio/minio:RELEASE.2025-04-08T15-41-24Z minio/mc:RELEASE.2025-04-08T15-39-49Z
 TF      := terraform -chdir=infra
 
-.PHONY: up down cluster platform image dags airflow ui password status
+.PHONY: up down cluster platform image airflow ui password status
 
-up: cluster platform image dags airflow
+up: cluster platform image airflow
 
 cluster:
 	$(TF)/01-cluster init -input=false
 	$(TF)/01-cluster apply -auto-approve -input=false
-	kind load docker-image $(MINIO) --name $(CLUSTER)
+	# Not `kind load`: it imports every platform, and these cached images only hold one.
+	for image in $(MINIO); do \
+		for node in $$(kind get nodes --name $(CLUSTER)); do \
+			docker save --platform linux/$$(docker version -f '{{.Server.Arch}}') $$image | \
+				docker exec -i $$node ctr --namespace=k8s.io images import --digests --snapshotter=overlayfs - || exit 1; \
+		done; \
+	done
 
 platform:
 	$(TF)/02-platform init -input=false
@@ -22,9 +28,6 @@ platform:
 image:
 	docker build -t $(IMAGE):$(TAG) image
 	kind load docker-image $(IMAGE):$(TAG) --name $(CLUSTER)
-
-dags:
-	./scripts/push-dags.sh
 
 airflow:
 	$(TF)/03-airflow init -input=false
