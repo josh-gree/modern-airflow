@@ -63,10 +63,10 @@ resource "kubernetes_secret_v1" "connections" {
     })
     AIRFLOW_CONN_LOG_STORE = jsonencode({
       conn_type = "aws"
-      login     = local.minio.access_key
-      password  = local.minio.secret_key
+      login     = local.s3.access_key
+      password  = local.s3.secret_key
       extra = {
-        endpoint_url  = local.minio.endpoint
+        endpoint_url  = local.s3.endpoint
         region_name   = "us-east-1"
         config_kwargs = { s3 = { addressing_style = "path" } }
       }

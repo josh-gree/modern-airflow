@@ -74,7 +74,7 @@ resource "helm_release" "airflow" {
       logging = {
         remote_logging         = "True"
         remote_log_conn_id     = "log_store"
-        remote_base_log_folder = "s3://${local.minio.bucket}"
+        remote_base_log_folder = "s3://${local.s3.bucket}"
       }
     }
   })]

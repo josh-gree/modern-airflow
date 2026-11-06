@@ -45,7 +45,7 @@ data "terraform_remote_state" "platform" {
 }
 
 locals {
-  minio = data.terraform_remote_state.platform.outputs.minio
+  s3 = data.terraform_remote_state.platform.outputs.s3
 
   namespace   = kubernetes_namespace_v1.airflow.metadata[0].name
   db_cluster  = "airflow-db"
