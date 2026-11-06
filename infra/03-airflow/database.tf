@@ -24,7 +24,7 @@ resource "kubernetes_manifest" "db_cluster" {
       namespace = local.namespace
     }
     spec = {
-      instances = 2
+      instances = 1
       bootstrap = {
         initdb = {
           database = local.db_name
@@ -63,7 +63,7 @@ resource "kubernetes_manifest" "db_pooler" {
     }
     spec = {
       cluster   = { name = local.db_cluster }
-      instances = 2
+      instances = 1
       type      = "rw"
       pgbouncer = {
         poolMode = "transaction"

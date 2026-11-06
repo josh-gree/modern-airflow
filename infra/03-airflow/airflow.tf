@@ -39,8 +39,8 @@ resource "helm_release" "airflow" {
       defaultUser    = { password = random_password.admin.result }
     }
 
-    scheduler = { replicas = 2, resources = local.medium }
-    apiServer = { replicas = 2, resources = local.medium }
+    scheduler = { replicas = 1, resources = local.medium }
+    apiServer = { replicas = 1, resources = local.medium }
     dagProcessor = {
       enabled   = true
       replicas  = 1
